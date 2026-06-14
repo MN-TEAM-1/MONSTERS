@@ -1,22 +1,27 @@
 const express = require('express');
 const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('ffmpeg-static');
 const app = express();
-const PORT = process.env.PORT || 10000;
 
+ffmpeg.setFfmpegPath(ffmpegPath);
+
+const PORT = process.env.PORT || 10000;
 const STREAM_URL = process.env.STREAM_URL;
 
-// هنا إعدادات اللوجو الافتراضية
-// رابط لوجو حقيقي شفاف للتجربة (شعار جيتهاب مصغر)
-const LOGO_URL = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"; 
+// رابط اللوجو الخاص بك (beIN MONSTERS MAX 2)
+const LOGO_URL = "https://i.ibb.co/bj6ZR1Qw/be-IN-MONSTERS-MAX-2.png"; 
 
-const LOGO_WIDTH = 50;   // حجم صغير مناسب للتجربة
-const LOGO_HEIGHT = 50;  
-const X_POSITION = 20;   // متموضع في الزاوية
-const Y_POSITION = 20;
+// الأبعاد والموضع الدقيق بناءً على تحليل الصورة exported-image.png
+const LOGO_WIDTH = 135;   // العرض المناسب لتغطية الشعار و MAX
+const LOGO_HEIGHT = 65;   // الارتفاع المناسب
+const X_POSITION = 1115;  // الموضع الأفقي (من اليسار) للزاوية العليا اليمنى
+const Y_POSITION = 25;    // الموضع الرأسي (من الأعلى) أسفل كلمة LIVE
+
 app.get('/live.m3u8', (req, res) => {
-    if (!STREAM_URL) return res.status(500).send("خطأ: رابط STREAM_URL غير مضبوط في الإعدادات!");
+    if (!STREAM_URL) return res.status(500).send("خطأ: رابط STREAM_URL غير مضبوط!");
     res.contentType('application/x-mpegURL');
 
+    // إنشاء فلتر المعالجة بالابعاد والموضع الجديد
     const filterString = `movie=${LOGO_URL},scale=${LOGO_WIDTH}:${LOGO_HEIGHT}[logo];[in][logo]overlay=${X_POSITION}:${Y_POSITION}[out]`;
 
     ffmpeg(STREAM_URL)
@@ -30,7 +35,9 @@ app.get('/live.m3u8', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('سيرفر Monsters لـ IPTV يعمل بنجاح! رابط البث النظيف هو: /live.m3u8');
+    res.send('سيرفر Monsters يعمل بنجاح بالشعار الجديد!');
 });
 
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
