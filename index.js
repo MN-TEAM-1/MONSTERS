@@ -6,13 +6,13 @@ const PORT = process.env.PORT || 10000;
 const STREAM_URL = process.env.STREAM_URL;
 
 // هنا إعدادات اللوجو الافتراضية
-const LOGO_URL = "https://i.imgur.com/your_logo.png"; // ضع رابط لوجوك الـ PNG الشفاف هنا لاحقاً
+// رابط لوجو حقيقي شفاف للتجربة (شعار جيتهاب مصغر)
+const LOGO_URL = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"; 
 
-const LOGO_WIDTH = 120;  // عرض اللوجو بالبكسل
-const LOGO_HEIGHT = 60;  // ارتفاع اللوجو بالبكسل
-const X_POSITION = 50;   // المسافة من اليسار X
-const Y_POSITION = 30;   // المسافة من الأعلى Y
-
+const LOGO_WIDTH = 50;   // حجم صغير مناسب للتجربة
+const LOGO_HEIGHT = 50;  
+const X_POSITION = 20;   // متموضع في الزاوية
+const Y_POSITION = 20;
 app.get('/live.m3u8', (req, res) => {
     if (!STREAM_URL) return res.status(500).send("خطأ: رابط STREAM_URL غير مضبوط في الإعدادات!");
     res.contentType('application/x-mpegURL');
